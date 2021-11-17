@@ -41,4 +41,9 @@ done
 
 log::info "Finished configuration. Launching..."
 
+argv=("$@")
+if [[ "${argv[0]}" == "openvpn" ]]; then
+    set -- "${argv[0]}" --config "${argv[@]:1}" --writepid /tmp/openvpn.pid
+fi
+
 exec "$@"

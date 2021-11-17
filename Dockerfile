@@ -14,11 +14,13 @@ RUN set -eux; \
 RUN set -eux; \
     curl https://www.ivpn.net/releases/config/ivpn-openvpn-config.zip --output ivpn.zip; \
     echo "${IVPN_OPENVPN_CONFIG_SHA512} ivpn.zip" | sha512sum --strict --check; \
-    unzip -j -d /etc/openvpn/client ivpn.zip
+    mkdir /config; \
+    unzip -j -d /config/client ivpn.zip
 
 # COPY /entrypoint/docker-healthcheck.sh /
 COPY /entrypoint/docker-entrypoint.sh /
 COPY /entrypoint/10-modify-in-place-opvn.sh /docker-entrypoint.d
+COPY /entrypoint/20-update-resolv-conf.sh /docker-entrypoint.d
 
 RUN set -eux; \
     chmod +x /docker-entrypoint.sh /docker-entrypoint.d/*
@@ -30,4 +32,4 @@ STOPSIGNAL SIGQUIT
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["openvpn"]
+WORKDIR /config/client
