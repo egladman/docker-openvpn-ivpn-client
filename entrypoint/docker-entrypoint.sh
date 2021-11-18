@@ -32,7 +32,7 @@ for f in /docker-entrypoint.d/*.sh; do
 
     if [[ -x "$f" ]]; then # It's executable
 	      log::info "Executing script '$f'"
-	      "$f" || :
+	      "$f"
     else
 	      log::warn "Ignoring '${script}'. Not executable."
     fi
@@ -42,7 +42,12 @@ log::info "Finished configuration. Launching..."
 
 argv=("$@")
 if [[ "${argv[0]}" == "openvpn" ]]; then
-    set -- "${argv[0]}" --config "${argv[@]:1}" --writepid /tmp/openvpn.pid
+    # Dumbest, but simplest solution I could think of at one in the morning.
+    # --up is very particular of what gets passed to it
+    printf '%s\n%s\n' "#!/bin/bash" ">/tmp/openvpn_isready" > /tmp/openvpn_up
+    chmod +x /tmp/openvpn_up
+
+    set -- "${argv[0]}" --config "${argv[@]:1}" --script-security 2 --up /tmp/openvpn_up
 fi
 
 exec "$@"

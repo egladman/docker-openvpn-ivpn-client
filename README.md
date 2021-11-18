@@ -1,6 +1,10 @@
 # docker-openvpn-ivpn-client
 OpenVPN client docker image for [ivpn.net](https://www.ivpn.net/).
 
+Features:
+- Does not require `--privileged`
+- Does not run as root
+
 While this was built with [ivpn.net](https://www.ivpn.net/) in mind, this image
 can easily be used for any other vpn provider by mounting a volume to
 `/config/client` that contains `.ovpn` files.
@@ -28,6 +32,7 @@ docker run --rm openvpn-ivpn:latest ls
 docker run \
     --rm \
     --cap-add NET_ADMIN \
+    --volume <path/to/empty/file>:/etc/resolv.conf \
     --volume <path/to/openvpn/credentails>:/config/credentials:ro \
     --device=/dev/net/tun \
     openvpn-ivpn:latest \
@@ -47,12 +52,19 @@ foobar
 
 Source: [ivpn docs](https://www.ivpn.net/setup/linux-terminal/)
 
-2. Run container 
+2. Create an empty file named `resolv.conf` and grant ownership to the image's uid/gid
+
+```
+touch resolv.conf && sudo chown 2222:2222 resolv.conf
+```
+
+3. Run container 
 
 ```
 docker run \
     --rm \
     --cap-add NET_ADMIN \
+    --volume "${PWD}"/resolv.conf:/etc/resolv.conf \
     --volume "${PWD}"/credentials:/config/credentials:ro \
     --device=/dev/net/tun \
     openvpn-ivpn:latest \
