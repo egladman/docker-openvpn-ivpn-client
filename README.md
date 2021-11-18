@@ -4,6 +4,7 @@ OpenVPN client docker image for [ivpn.net](https://www.ivpn.net/).
 Features:
 - Does not require `--privileged`
 - Does not run as root
+- Less than 100MB in size
 
 While this was built with [ivpn.net](https://www.ivpn.net/) in mind, this image
 can easily be used for any other vpn provider by mounting a volume to
