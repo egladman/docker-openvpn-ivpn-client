@@ -28,8 +28,8 @@ docker run --rm openvpn-ivpn:latest ls
 docker run \
     --rm \
     --cap-add NET_ADMIN \
-    --privileged \
     --volume <path/to/openvpn/credentails>:/config/credentials:ro \
+    --device=/dev/net/tun \
     openvpn-ivpn:latest \
     openvpn <config>
 ```
@@ -53,8 +53,8 @@ Source: [ivpn docs](https://www.ivpn.net/setup/linux-terminal/)
 docker run \
     --rm \
     --cap-add NET_ADMIN \
-    --privileged \
     --volume "${PWD}"/credentials:/config/credentials:ro \
+    --device=/dev/net/tun \
     openvpn-ivpn:latest \
     openvpn USA-New_York.ovpn
 ```
