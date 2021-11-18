@@ -3,14 +3,13 @@
 set -o pipefail -o errexit
 
 SKIP_ENTRYPOINTD=${SKIP_ENTRYPOINTD:-0}
-SELF="${0##*/}"
 
 _log() {
     # Usage: log <prefix> <message>
     #        log WARN "hello world"
 
     printf -v now '%(%m-%d-%Y %H:%M:%S)T' -1
-    printf '%b\n' "[${1:: 4}] ${now} ${SELF} ${2}"
+    printf '%b\n' "[${1:: 4}] ${now} ${0##*/} ${2}"
 }
 
 log::warn() {
