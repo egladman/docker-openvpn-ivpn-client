@@ -22,7 +22,7 @@ RUN set -eux; \
     echo "$OPENVPN_ARCHIVE_SHA512 archive.zip" | sha512sum --strict --check; \
     mkdir /config; \
     unzip -j -d /config/client archive.zip; \
-    apt-get remove -y curl ca-certificates; \
+    apt-get remove -y curl unzip ca-certificates; \
     rm -rf /var/lib/apt/lists/*; \
     mkdir /docker-entrypoint.d
 
