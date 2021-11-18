@@ -40,14 +40,19 @@ done
 
 log::info "Finished configuration. Launching..."
 
-argv=("$@")
-if [[ "${argv[0]}" == "openvpn" ]]; then
+if [[ "$1" == "openvpn" ]] || [[ -z "$1" ]]; then
+    if [[ -z "$CONFIG" ]]; then
+        log::error "Environment variable 'CONFIG' unset. You must specify an OpenVPN config."
+        exit 1
+    fi
+
     # Dumbest, but simplest solution I could think of at one in the morning.
     # --up is very particular of what gets passed to it
     printf '%s\n%s\n' "#!/bin/bash" ">/tmp/openvpn_isready" > /tmp/openvpn_up
     chmod +x /tmp/openvpn_up
 
-    set -- "${argv[0]}" --config "${argv[@]:1}" --auth-nocache --script-security 2 --up /tmp/openvpn_up
+    set -- openvpn --config "$CONFIG" --auth-nocache --script-security 2 --up /tmp/openvpn_up
 fi
 
+log::info "Executing: ${@}"
 exec "$@"

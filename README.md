@@ -33,10 +33,10 @@ docker run \
     --rm \
     --cap-add NET_ADMIN \
     --volume <path/to/empty/file>:/etc/resolv.conf \
-    --volume <path/to/openvpn/credentails>:/config/credentials:ro \
+    --env USERNAME=<user> \
+    --env CONFIG=<config> \
     --device=/dev/net/tun \
-    openvpn-ivpn:latest \
-    openvpn <config>
+    openvpn-ivpn:latest
 ```
 
 ## Example
@@ -55,9 +55,9 @@ docker run \
     --cap-add NET_ADMIN \
     --volume "${PWD}"/resolv.conf:/etc/resolv.conf \
     --env USERNAME=ivpnADCef123 \
+    --env CONFIG=USA-New_York.ovpn \
     --device=/dev/net/tun \
-    openvpn-ivpn:latest \
-    openvpn USA-New_York.ovpn
+    openvpn-ivpn:latest
 ```
 
 > Only your account ID is used for the authentication and is case-sensitive.
