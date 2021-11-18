@@ -41,32 +41,26 @@ docker run \
 
 ## Example
 
-1. Create file `credentials` with contents:
-
-```
-ivpnADCef123
-foobar
-```
-> Only your account ID is used for the authentication and is case-sensitive.
-> The password can be anything, like "ivpn", if your client requires a non-blank password.
-
-Source: [ivpn docs](https://www.ivpn.net/setup/linux-terminal/)
-
-2. Create an empty file named `resolv.conf` and grant ownership to the image's uid/gid
+1. Create an empty file named `resolv.conf` and grant ownership to the image's uid/gid
 
 ```
 touch resolv.conf && sudo chown 2222:2222 resolv.conf
 ```
 
-3. Run container 
+2. Run container
 
 ```
 docker run \
     --rm \
     --cap-add NET_ADMIN \
     --volume "${PWD}"/resolv.conf:/etc/resolv.conf \
-    --volume "${PWD}"/credentials:/config/credentials:ro \
+    --env USERNAME=ivpnADCef123 \
     --device=/dev/net/tun \
     openvpn-ivpn:latest \
     openvpn USA-New_York.ovpn
 ```
+
+> Only your account ID is used for the authentication and is case-sensitive.
+> The password can be anything, like "ivpn", if your client requires a non-blank password.
+
+Source: [ivpn docs](https://www.ivpn.net/setup/linux-terminal/)

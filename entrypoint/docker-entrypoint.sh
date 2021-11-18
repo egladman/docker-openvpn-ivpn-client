@@ -47,7 +47,7 @@ if [[ "${argv[0]}" == "openvpn" ]]; then
     printf '%s\n%s\n' "#!/bin/bash" ">/tmp/openvpn_isready" > /tmp/openvpn_up
     chmod +x /tmp/openvpn_up
 
-    set -- "${argv[0]}" --config "${argv[@]:1}" --script-security 2 --up /tmp/openvpn_up
+    set -- "${argv[0]}" --config "${argv[@]:1}" --auth-nocache --script-security 2 --up /tmp/openvpn_up
 fi
 
 exec "$@"

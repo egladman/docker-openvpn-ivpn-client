@@ -24,7 +24,7 @@ RUN set -eux; \
     chown -R $UID:$GID /config
 
 COPY /entrypoint/docker-entrypoint.sh /
-COPY /entrypoint/10-modify-in-place-opvn.sh /docker-entrypoint.d
+COPY /entrypoint/10-patch-opvn-configs.sh /docker-entrypoint.d
 COPY /entrypoint/20-create-resolv-conf.sh /docker-entrypoint.d
 COPY /entrypoint/90-update-resolv-conf.sh /docker-entrypoint.d
 
