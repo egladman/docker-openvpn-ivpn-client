@@ -41,7 +41,7 @@ STOPSIGNAL SIGQUIT
 WORKDIR /config/client
 USER $UID
 
-HEALTHCHECK --interval=90s --timeout=10s --start-period=15s \
+HEALTHCHECK --interval=90s --timeout=10s --start-period=5s \
   CMD /docker-healthcheck.sh || exit 1
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
