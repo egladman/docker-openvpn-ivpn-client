@@ -8,7 +8,7 @@ LABEL maintainer="Eli Gladman <eli@gladman.cc>"
 ARG UID=2222
 ARG GID=2222
 
-ARG OPENVPN_ARCHIVE_SHA512=7ae10984f221d7b29b6cc778637607f053ea66ca02faffde434d63b74ef3bea306e73548b5bc5f11799d0f83878a700647f8f222c2ba70c18667c31d83c46da4
+ARG OPENVPN_ARCHIVE_SHA512=f7bc95720fe91610e118408080c6edb79d07350d020c3188101d2eedcafd533f57bc043a18a0558eaffac45d03a786a72b8c3771c822d34e035d2637d488dbaa
 ARG OPENVPN_ARCHIVE_URL=https://www.ivpn.net/releases/config/ivpn-openvpn-config.zip
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -17,7 +17,7 @@ RUN set -eux; \
     addgroup --system --gid $GID foo; \
     adduser --system --disabled-login --ingroup foo --no-create-home --home /nonexistent --gecos "openvpn user" --shell /bin/false --uid $UID foo; \
     apt-get update; \
-    apt-get install -y --no-install-recommends openvpn unzip curl ca-certificates; \
+    apt-get install -y --no-install-recommends openvpn unzip curl ca-certificates iputils-ping; \
     curl $OPENVPN_ARCHIVE_URL --output archive.zip; \
     echo "$OPENVPN_ARCHIVE_SHA512 archive.zip" | sha512sum --strict --check; \
     mkdir /config; \
