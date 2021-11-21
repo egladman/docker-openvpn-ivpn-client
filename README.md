@@ -24,7 +24,7 @@ make image
 configs with the following command:
 
 ```
-docker run --rm openvpn-ivpn:latest ls
+docker run --rm --env SKIP_ENTRYPOINTD=1 openvpn-ivpn:latest ls
 ```
 
 2. Run container
@@ -65,3 +65,16 @@ docker run \
 > The password can be anything, like "ivpn", if your client requires a non-blank password.
 
 Source: [ivpn docs](https://www.ivpn.net/setup/linux-terminal/)
+
+## Environment Variables
+
+- `SKIP_ENTRYPOINTD`
+  - Default: `0`
+- `USERNAME`
+  - Required: False
+- `PASSWORD`
+  - Required: False
+- `CONFIG_DIR`
+  - Default: `/config/client`
+- `PASS_FILE`
+  - Default: `/config/credentials`
