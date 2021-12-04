@@ -22,7 +22,7 @@ main() {
     local config_dir="${CONFIG_DIR:-/config/client}"
     local pass_file="${PASS_FILE:-/config/credentials}"
 
-    sed -i "s:auth-user-pass:auth-user-pass ${pass_file}:" "${config_dir}"/*.ovpn
+    sed -i -r "s/auth-user-pass[[:blank:]]?$/auth-user-pass ${pass_file}/" "${config_dir}"/*.ovpn
 
     if [[ -z "$USERNAME" ]]; then
         log::warn "Environment variable 'USERNAME' is unset."
