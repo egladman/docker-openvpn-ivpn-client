@@ -18,6 +18,15 @@ Create image `openvpn-ivpn`
 make image
 ```
 
+### Advanced
+Create image `openvpn-ivpn`
+- Skip checksum validation
+- Do not use cache when building image
+
+```
+make image DOCKER_BUILD_FLAGS="--no-cache --build-arg SKIP_CHECKSUM=1" 
+```
+
 ## Run
 
 1. Determine which openvpn config to use. You can list all available `.ovpn`
@@ -66,10 +75,33 @@ docker run \
 
 Source: [ivpn docs](https://www.ivpn.net/setup/linux-terminal/)
 
-## Environment Variables
+## Variables
+
+### Build
+
+- `REGISTRY`
+  - Default: `docker.io/`
+- `DEBIAN_VERSION`
+  - Default: `bullseye`
+- `UID`
+  - Default: `2222`
+- `GID`
+  - Default: `2222`
+- `OPENVPN_ARCHIVE_SHA512`
+  - Default: *See code*
+- `OPENVPN_ARCHIVE_URL`
+  - Default: *See code*
+- `SKIP_CHECKSUM`
+  - Default: `0`
+
+### Runtime
 
 - `SKIP_ENTRYPOINTD`
   - Default: `0`
+- `DEBUG`
+  - Default: `0`
+- `VERBOSITY`
+  - Default: `4`
 - `USERNAME`
   - Required: False
 - `PASSWORD`
