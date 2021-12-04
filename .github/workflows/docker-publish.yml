@@ -24,17 +24,14 @@ jobs:
         
         include:
           - registry: ghcr.io
-            REPOSITORY: ${{ github.repository_owner }}/openvpn-ivpn
-            TOKEN_SECRET_NAME: GITHUB_TOKEN
-            USERNAME: ${{ github.actor }}
-          
-          - registry: docker.io
-            REPOSITORY: egladman/openvpn-ivpn
-            TOKEN_SECRET_NAME: DOCKERHUB_TOKEN
-            USERNAME: egladman
+            registry_username: ${{ github.actor }}
+            repository: ${{ github.repository_owner }}/openvpn-ivpn
+            token_secret_name: GITHUB_TOKEN
 
-    env:
-      REGISTRY: ${{ matrix.registry }}
+          - registry: docker.io
+            registry_username: egladman
+            repository: egladman/openvpn-ivpn
+            token_secret_name: DOCKERHUB_TOKEN
 
     runs-on: ubuntu-latest
     permissions:
@@ -46,18 +43,18 @@ jobs:
         uses: actions/checkout@v2
 
       # https://github.com/docker/login-action
-      - name: Log into registry ${{ env.REGISTRY }}
+      - name: Log into registry ${{ matrix.registry }}
         if: github.event_name != 'pull_request'
         uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ env.USERNAME }}
-          password: ${{ secrets[matrix.TOKEN_SECRET_NAME] }}
+          registry: ${{ matrix.registry }}
+          username: ${{ matrix.registry_username }}
+          password: ${{ secrets[matrix.token_secret_name] }}
 
       - name: Build image
-        run: make image TAG=${{ github.sha }} REPOSITORY=${{ env.REPOSITORY }} REPOSITORY_PREFIX=${{ env.REGISTRY }} DOCKER_BUILD_FLAGS="--build-arg SKIP_CHECKSUM=1"
+        run: make image TAG=${{ github.sha }} REPOSITORY=${{ matrix.repository }} REPOSITORY_PREFIX=${{ matrix.registry }} DOCKER_BUILD_FLAGS="--build-arg SKIP_CHECKSUM=1"
   
       - name: Push image
-        run: docker image push --all-tags ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
+        run: docker image push --all-tags ${{ matrix.registry }}/${{ matrix.repository }}
         if: ${{ github.event_name != 'pull_request' }}
 
