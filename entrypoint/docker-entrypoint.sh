@@ -3,6 +3,8 @@
 set -o pipefail -o errexit
 
 SKIP_ENTRYPOINTD=${SKIP_ENTRYPOINTD:-0}
+VERBOSITY=${VERBOSITY:-4}
+DEBUG=${DEBUG:-0}
 
 _log() {
     # Usage: log <prefix> <message>
@@ -51,7 +53,7 @@ if [[ "$1" == "openvpn" ]] || [[ -z "$1" ]]; then
     printf '%s\n%s\n' "#!/bin/bash" ">/tmp/openvpn_isready" > /tmp/openvpn_up
     chmod +x /tmp/openvpn_up
 
-    set -- openvpn --config "$CONFIG" --auth-nocache --script-security 2 --up /tmp/openvpn_up
+    set -- openvpn --config "$CONFIG" --verb $VERBOSITY --auth-nocache --script-security 2 --up /tmp/openvpn_up
 fi
 
 log::info "Executing: ${@}"
