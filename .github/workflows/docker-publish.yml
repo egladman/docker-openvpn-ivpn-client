@@ -15,9 +15,6 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  IMAGE_NAME: openvpn-ivpn
-
 jobs:
   build:
 
@@ -27,13 +24,13 @@ jobs:
         
         include:
           - registry: ghcr.io
-            REPOSITORY: ${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
-            TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            REPOSITORY: ${{ github.repository_owner }}/openvpn-ivpn
+            TOKEN_SECRET_NAME: GITHUB_TOKEN
             USERNAME: ${{ github.actor }}
           
           - registry: docker.io
-            REPOSITORY: egladman/${{ env.IMAGE_NAME }}
-            TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+            REPOSITORY: egladman/openvpn-ivpn
+            TOKEN_SECRET_NAME: DOCKERHUB_TOKEN
             USERNAME: egladman
 
     env:
@@ -55,7 +52,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ env.USERNAME }}
-          password: ${{ env.TOKEN }}
+          password: ${{ secrets[matrix.TOKEN_SECRET_NAME] }}
 
       - name: Build image
         run: make image TAG=${{ github.sha }} REPOSITORY=${{ env.REPOSITORY }} REPOSITORY_PREFIX=${{ env.REGISTRY }} DOCKER_BUILD_FLAGS="--build-arg SKIP_CHECKSUM=1"
