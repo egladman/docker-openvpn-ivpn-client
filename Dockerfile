@@ -12,6 +12,7 @@ ARG OPENVPN_ARCHIVE_SHA512=f7bc95720fe91610e118408080c6edb79d07350d020c3188101d2
 ARG OPENVPN_ARCHIVE_URL=https://www.ivpn.net/releases/config/ivpn-openvpn-config.zip
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG SKIP_CHECKSUM=0
 
 RUN set -eux; \
     addgroup --system --gid $GID foo; \
@@ -19,7 +20,7 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends openvpn unzip curl ca-certificates iputils-ping; \
     curl $OPENVPN_ARCHIVE_URL --output archive.zip; \
-    echo "$OPENVPN_ARCHIVE_SHA512 archive.zip" | sha512sum --strict --check; \
+    [[ $SKIP_CHECKSUM -eq 1 ]] && echo "$OPENVPN_ARCHIVE_SHA512 archive.zip" | sha512sum --strict --check; \
     mkdir /config; \
     unzip -j -d /config/client archive.zip; \
     apt-get remove -y curl unzip ca-certificates; \
