@@ -4,11 +4,25 @@ OpenVPN client docker image for [ivpn.net](https://www.ivpn.net/).
 Features:
 - Does not require `--privileged`
 - Does not run as root
-- Less than 100MB in size
+- Less than 40MB in size (compressed)
 
 While this was built with [ivpn.net](https://www.ivpn.net/) in mind, this image
 can easily be used for any other vpn provider by mounting a volume to
 `/config/client` that contains `.ovpn` files.
+
+## Quickstart
+
+The image is automatically built [bi-weekly](https://github.com/egladman/docker-openvpn-ivpn-client/blob/main/.github/workflows/docker-publish.yml#L10) to stay up-to-date with the latest security updates.
+
+### ghcr.io
+```
+docker pull ghcr.io/egladman/openvpn-ivpn:latest
+```
+
+### docker.io
+```
+docker pull docker.io/egladman/openvpn-ivpn:latest
+```
 
 ## Build
 
