@@ -7,7 +7,7 @@ name: Docker
 
 on:
   schedule:
-    - cron: '35 20 * * *'
+    - cron: '45 23 * * 1,5'
   push:
     branches: [ main ]
     # Publish semver tags as releases.
@@ -16,12 +16,28 @@ on:
     branches: [ main ]
 
 env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
-  REPOSITORY: ${{ github.repository_owner }}/openvpn-ivpn
+  IMAGE_NAME: openvpn-ivpn
 
 jobs:
   build:
+
+    strategy:
+      matrix:
+        registry: [ghcr.io, docker.io]
+        
+        include:
+          - registry: ghcr.io
+            REPOSITORY: ${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
+            TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            USERNAME: ${{ github.actor }}
+          
+          - registry: docker.io
+            REPOSITORY: egladman/${{ env.IMAGE_NAME }}
+            TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+            USERNAME: egladman
+
+    env:
+      REGISTRY: ${{ matrix.registry }}
 
     runs-on: ubuntu-latest
     permissions:
@@ -32,20 +48,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
         uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ env.USERNAME }}
+          password: ${{ env.TOKEN }}
 
       - name: Build image
         run: make image TAG=${{ github.sha }} REPOSITORY=${{ env.REPOSITORY }} REPOSITORY_PREFIX=${{ env.REGISTRY }} DOCKER_BUILD_FLAGS="--build-arg SKIP_CHECKSUM=1"
   
-      # Push image
       - name: Push image
         run: docker image push --all-tags ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
         if: ${{ github.event_name != 'pull_request' }}
