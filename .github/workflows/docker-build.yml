@@ -13,6 +13,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Setup buildx
+        run: docker buildx create --use
+
       - name: Build image
         run: make image DOCKER_BUILD_FLAGS="--build-arg SKIP_CHECKSUM=1"
-
