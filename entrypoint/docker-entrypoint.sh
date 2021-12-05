@@ -33,10 +33,10 @@ for f in /docker-entrypoint.d/*.sh; do
     fi
 
     if [[ -x "$f" ]]; then # It's executable
-	      log::info "Executing script '$f'"
+	      log::info "Executing script '${f}'"
 	      "$f"
     else
-	      log::warn "Ignoring '${script}'. Not executable."
+	      log::warn "Ignoring '${f}'. Not executable."
     fi
 done
 
@@ -53,8 +53,8 @@ if [[ "$1" == "openvpn" ]] || [[ -z "$1" ]]; then
     printf '%s\n%s\n' "#!/bin/bash" ">/tmp/openvpn_isready" > /tmp/openvpn_up
     chmod +x /tmp/openvpn_up
 
-    set -- openvpn --config "$CONFIG" --verb $VERBOSITY --auth-nocache --script-security 2 --up /tmp/openvpn_up
+    set -- openvpn --config "$CONFIG" --verb "$VERBOSITY" --auth-nocache --script-security 2 --up /tmp/openvpn_up
 fi
 
-log::info "Executing: ${@}"
+log::info "Executing: ${*}"
 exec "$@"
