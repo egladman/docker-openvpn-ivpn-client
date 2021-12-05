@@ -1,11 +1,14 @@
 DOCKER := docker
 DOCKER_BUILD_FLAGS :=
 
-_=$() $()
+SPACE=$() $()
+COMMA=,
+
 TAG ?= $(shell date +"%Y%m%d")
 REPOSITORY := openvpn-ivpn
 
-BUILDX_ENABLED := $(shell docker buildx &> /dev/null && printf true || printf false)
+# Auto enable buildx when available
+BUILDX_ENABLED := $(shell docker buildx version > /dev/null 2>&1 && printf true || printf false)
 BUILDX_PLATFORMS := linux/amd64 linux/arm64
 
 ifdef REPOSITORY_PREFIX
@@ -15,15 +18,22 @@ endif
 ifeq ($(BUILDX_ENABLED),true)
 		override DOCKER := $(DOCKER) buildx
 
-		DOCKER_BUILD_FLAGS += --platform $(subst $(_),:,$(BUILDX_PLATFORMS))
+		override DOCKER_BUILD_FLAGS += --platform $(subst $(SPACE),$(COMMA),$(BUILDX_PLATFORMS))
 endif
 
 $(info Docker buildx enabled: $(BUILDX_ENABLED))
 
-.PHONY: image
+.PHONY: image image-push
 
 image:
 	$(DOCKER) build . \
 		$(DOCKER_BUILD_FLAGS) \
 		--tag $(REPOSITORY):$(TAG) \
 		--tag $(REPOSITORY):latest
+
+image-push:
+ifeq ($(BUILDX_ENABLED),true)
+	$(MAKE) image DOCKER_BUILD_FLAGS+="--push"
+else
+	$(DOCKER) push $(REPOSITORY) --all-tags
+endif

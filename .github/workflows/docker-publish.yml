@@ -1,4 +1,4 @@
-name: Docker
+name: Publish Image
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -54,4 +54,4 @@ jobs:
         run: make image TAG=${{ github.sha }} REPOSITORY=${{ matrix.repository }} REPOSITORY_PREFIX=${{ matrix.registry }} DOCKER_BUILD_FLAGS="--build-arg SKIP_CHECKSUM=1"
   
       - name: Push image
-        run: docker image push --all-tags ${{ matrix.registry }}/${{ matrix.repository }}
+        run: make image-push TAG=${{ github.sha }} REPOSITORY=${{ matrix.repository }} REPOSITORY_PREFIX=${{ matrix.registry }} DOCKER_BUILD_FLAGS="--build-arg SKIP_CHECKSUM=1"
