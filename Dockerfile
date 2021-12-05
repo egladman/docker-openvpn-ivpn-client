@@ -20,7 +20,7 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends openvpn unzip curl ca-certificates iputils-ping; \
     curl $OPENVPN_ARCHIVE_URL --output archive.zip; \
-    [[ $SKIP_CHECKSUM -eq 1 ]] && echo "$OPENVPN_ARCHIVE_SHA512 archive.zip" | sha512sum --strict --check; \
+    [ $SKIP_CHECKSUM -eq 1 ] && echo "$OPENVPN_ARCHIVE_SHA512 archive.zip" | sha512sum --strict --check; \
     mkdir /config; \
     unzip -j -d /config/client archive.zip; \
     apt-get remove -y curl unzip ca-certificates; \
@@ -42,7 +42,7 @@ STOPSIGNAL SIGQUIT
 WORKDIR /config/client
 USER $UID
 
-HEALTHCHECK --interval=90s --timeout=10s --start-period=5s \
+HEALTHCHECK --interval=60s --timeout=4s \
   CMD /docker-healthcheck.sh || exit 1
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
