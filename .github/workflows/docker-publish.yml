@@ -14,10 +14,6 @@ on:
     tags: [ 'v*.*.*' ]
     paths-ignore:
       - '**.md'
-  pull_request:
-    branches: [ main ]
-    paths-ignore:
-      - '**.md'
 
 jobs:
   build:
@@ -48,7 +44,6 @@ jobs:
 
       # https://github.com/docker/login-action
       - name: Log into registry ${{ matrix.registry }}
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
         with:
           registry: ${{ matrix.registry }}
@@ -60,5 +55,3 @@ jobs:
   
       - name: Push image
         run: docker image push --all-tags ${{ matrix.registry }}/${{ matrix.repository }}
-        if: ${{ github.event_name != 'pull_request' }}
-
