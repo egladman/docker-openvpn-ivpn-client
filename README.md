@@ -5,6 +5,7 @@ Features:
 - Does not require `--privileged`
 - Does not run as root
 - Less than 40MB in size (compressed)
+- Multi-platform (amd64, arm64)
 
 While this was built with [ivpn.net](https://www.ivpn.net/) in mind, this image
 can easily be used for any other vpn provider by mounting a volume to
