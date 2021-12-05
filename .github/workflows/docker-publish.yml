@@ -1,4 +1,4 @@
-name: Docker
+name: Publish Image
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -42,6 +42,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
       # https://github.com/docker/login-action
       - name: Log into registry ${{ matrix.registry }}
         uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
@@ -49,9 +55,6 @@ jobs:
           registry: ${{ matrix.registry }}
           username: ${{ matrix.registry_username }}
           password: ${{ secrets[matrix.token_secret_name] }}
-
-      - name: Build image
-        run: make image TAG=${{ github.sha }} REPOSITORY=${{ matrix.repository }} REPOSITORY_PREFIX=${{ matrix.registry }} DOCKER_BUILD_FLAGS="--build-arg SKIP_CHECKSUM=1"
   
-      - name: Push image
-        run: docker image push --all-tags ${{ matrix.registry }}/${{ matrix.repository }}
+      - name: Build/Push image
+        run: make image-push BUILDX_ENABLED=true TAG=${{ github.sha }} REPOSITORY=${{ matrix.repository }} REPOSITORY_PREFIX=${{ matrix.registry }} DOCKER_BUILD_FLAGS="--build-arg SKIP_CHECKSUM=1"
