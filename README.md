@@ -101,7 +101,7 @@ Source: [ivpn docs](https://www.ivpn.net/setup/linux-terminal/)
 | `OPENVPN_LOGLEVEL` | OpenVPN verbosity                                   | `4`                   | `False`  |
 | `USERNAME`         | vpn provider username                               |                       | `True`   |
 | `PASSWORD`         | vpn provider password                               | `hunter2`             | `False`  |
-| `CONFIG_DIR`       | OpenVPN config directory                            | `/config/client`      | `True`   |
-| `PASS_FILE`        | OpenVPN credentials file                            | `/config/credentials` | `True`   |
-| `DNS_INTERNAL`     | vpn provider nameserver used by `openvpn` process   | `10.0.254.1`          | `True`   |
-| `DNS_EXTERNAL`     | vpn provider nameserver used **only** by entrypoint | `8.8.8.8`             | `True`   |
+| `CONFIG_DIR`       | OpenVPN config directory                            | `/config/client`      | `False`  |
+| `PASS_FILE`        | OpenVPN credentials file                            | `/config/credentials` | `False`  |
+| `DNS_INTERNAL`     | vpn provider nameserver used by `openvpn` process   | `10.0.254.1`          | `False`  |
+| `DNS_EXTERNAL`     | vpn provider nameserver used **only** by entrypoint | `8.8.8.8`             | `False`  |
