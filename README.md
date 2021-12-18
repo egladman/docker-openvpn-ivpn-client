@@ -92,36 +92,16 @@ Source: [ivpn docs](https://www.ivpn.net/setup/linux-terminal/)
 
 ## Variables
 
-### Build
-
-- `REGISTRY`
-  - Default: `docker.io/`
-- `DEBIAN_VERSION`
-  - Default: `bullseye`
-- `UID`
-  - Default: `2222`
-- `GID`
-  - Default: `2222`
-- `OPENVPN_ARCHIVE_SHA512`
-  - Default: *See code*
-- `OPENVPN_ARCHIVE_URL`
-  - Default: *See code*
-- `SKIP_CHECKSUM`
-  - Default: `0`
-
 ### Runtime
 
-- `SKIP_ENTRYPOINTD`
-  - Default: `0`
-- `DEBUG`
-  - Default: `0`
-- `VERBOSITY`
-  - Default: `4`
-- `USERNAME`
-  - Required: False
-- `PASSWORD`
-  - Required: False
-- `CONFIG_DIR`
-  - Default: `/config/client`
-- `PASS_FILE`
-  - Default: `/config/credentials`
+| Variable           | Description                                         | Default               | Required |
+| ------------------ | --------------------------------------------------- | --------------------- | -------- |
+| `SKIP_ENTRYPOINTD` | Disable running entrypoint scripts                  | `0`                   | `False`  |
+| `DEBUG_ENTRYPOINT` | Print debug logs                                    | `0`                   | `False`  |
+| `OPENVPN_LOGLEVEL` | OpenVPN verbosity                                   | `4`                   | `False`  |
+| `USERNAME`         | vpn provider username                               |                       | `True`   |
+| `PASSWORD`         | vpn provider password                               | `hunter2`             | `False`  |
+| `CONFIG_DIR`       | OpenVPN config directory                            | `/config/client`      | `False`  |
+| `PASS_FILE`        | OpenVPN credentials file                            | `/config/credentials` | `False`  |
+| `DNS_INTERNAL`     | vpn provider nameserver used by `openvpn` process   | `10.0.254.1`          | `False`  |
+| `DNS_EXTERNAL`     | vpn provider nameserver used **only** by entrypoint | `8.8.8.8`             | `False`  |

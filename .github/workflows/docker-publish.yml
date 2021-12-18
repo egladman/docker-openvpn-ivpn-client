@@ -57,4 +57,4 @@ jobs:
           password: ${{ secrets[matrix.token_secret_name] }}
   
       - name: Build/Push image
-        run: make image-push BUILDX_ENABLED=true TAG=${{ github.sha }} REPOSITORY=${{ matrix.repository }} REPOSITORY_PREFIX=${{ matrix.registry }} DOCKER_BUILD_FLAGS="--build-arg SKIP_CHECKSUM=1"
+        run: make image-push REPOSITORY=${{ matrix.repository }} REPOSITORY_PREFIX=${{ matrix.registry }} DOCKER_BUILD_FLAGS="--build-arg SKIP_CHECKSUM=1"
