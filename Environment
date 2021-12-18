@@ -4,3 +4,4 @@ DNS_INTERNAL ?= 10.0.254.1
 DNS_EXTERNAL ?= 8.8.8.8
 CONFIG_DIR = /config/client
 PASS_FILE = /config/credentials
+PASSWORD ?= hunter2

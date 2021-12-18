@@ -35,7 +35,7 @@ main() {
     fi
 
     if [[ -z "$PASSWORD" ]]; then
-        log::warn "Environment variable 'PASSWORD' is unset. Defaulting to 'hunter2'."
+        log::warn "Environment variable 'PASSWORD' is unset."
     fi
 
     if [[ -f "$PASS_FILE" ]]; then # A pass file was bind mounted in
@@ -50,7 +50,7 @@ main() {
     chmod 600 "$PASS_FILE"
 
     printf '%s\n' "$USERNAME" > "$PASS_FILE"
-    printf '%s\n' "${PASSWORD:-hunter2}" >> "$PASS_FILE"
+    printf '%s\n' "$PASSWORD" >> "$PASS_FILE"
 }
 
 main
