@@ -3,32 +3,9 @@
 set -o pipefail -o errexit
 
 main() {
-    # This could be accomplished with a sed one-liner, but where's the fun in
-    # that. Pure bash solution ftw
-
-    regex="^auth-user-pass([[:blank:]]){0,}"
-    for conf in "${CONFIG_DIR:?}"/*.ovpn; do
-        conf_patched=0
-
-        while read -r line; do
-            conf_data+=("$line")
-        done < "$conf"
-
-        for i in "${!conf_data[@]}"; do
-            if [[ "${conf_data[$i]}" =~ $regex ]] && [[ "${conf_data[$i]}" != *"${PASS_FILE:?}" ]]; then
-                conf_data[$i]="auth-user-pass ${PASS_FILE}"
-                conf_patched=1
-            fi
-        done
-
-        if [[ $conf_patched -eq 0 ]]; then
-            log::debug "Skipping config '$conf'."
-            continue
-        fi
-
-        log::debug "Patching config '$conf'."
-        printf '%s\n' "${conf_data[@]}" > "$conf"
-    done
+    # This might look odd. We're using ';' as the delimiter so we don't have to
+    # worry about escaping forward slashes in var PASS_FILE
+    sed -i -r "s;^(auth-user-pass)[[:blank:]]*$;auth-user-pass $PASS_FILE;" "$CONFIG_DIR"/*.ovpn
 
     if [[ -z "$USERNAME" ]]; then
         log::warn "Environment variable 'USERNAME' is unset."
