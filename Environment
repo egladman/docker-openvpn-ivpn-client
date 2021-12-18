@@ -1,0 +1,2 @@
+OPENVPN_LOGLEVEL ?= 4
+CONFIG ?= USA-New_York.ovpn
