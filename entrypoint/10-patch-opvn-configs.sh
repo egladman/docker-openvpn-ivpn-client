@@ -2,28 +2,6 @@
 
 set -o pipefail -o errexit
 
-_log() {
-    # Usage: log <prefix> <message>
-    #        log WARN "hello world"
-
-    printf -v now '%(%m-%d-%Y %H:%M:%S)T' -1
-    printf '%b\n' "[${1:: 4}] ${now} ${0##*/} ${2}"
-}
-
-log::debug() {
-    [[ $DEBUG -ne 1 ]] && return
-
-    _log "DEBUG" "$*"
-}
-
-log::warn() {
-    _log "WARN" "$*"
-}
-
-log::error() {
-    _log "ERROR" "$*"
-}
-
 main() {
     local config_dir="${CONFIG_DIR:-/config/client}"
     local pass_file="${PASS_FILE:-/config/credentials}"

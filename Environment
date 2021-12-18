@@ -1,2 +1,4 @@
 OPENVPN_LOGLEVEL ?= 4
 CONFIG ?= USA-New_York.ovpn
+DNS ?= 10.0.254.1
+DNS_INIT ?= 8.8.8.8
