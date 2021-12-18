@@ -3,9 +3,9 @@
 set -o pipefail -o errexit
 
 main() {
-    log::info "DNS modified. Temporarily using nameserver '${DNS_INIT}' during init."
+    log::info "Modifying DNS. Temporarily using nameserver '${DNS_EXTERNAL:?}' during init phase."
     printf '%s\n' "# Added by $0" > /etc/resolv.conf
-    printf '%s\n' "nameserver ${DNS_INIT}" >> /etc/resolv.conf
+    printf '%s\n' "nameserver ${DNS_EXTERNAL}" >> /etc/resolv.conf
 }
 
 main

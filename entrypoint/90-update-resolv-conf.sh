@@ -8,9 +8,9 @@ main() {
         sleep 1
     done
 
-    log::info "DNS modified. Permanently using nameserver '${DNS}'."
+    log::info "Modifying DNS. Permanently using nameserver '${DNS_INTERNAL:?}'."
     printf '%s\n' "# Added by $0" > /etc/resolv.conf
-    printf '%s\n' "nameserver ${DNS}" >> /etc/resolv.conf
+    printf '%s\n' "nameserver ${DNS_INTERNAL}" >> /etc/resolv.conf
 
 }
 
