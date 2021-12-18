@@ -1,4 +1,7 @@
 DOCKER := docker
+SED := sed
+GIT := git
+
 DOCKER_BUILD_FLAGS :=
 
 SPACE=$() $()
@@ -7,8 +10,8 @@ COMMA=,
 TAG_LATEST=true
 REPOSITORY := openvpn-ivpn
 
-GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD | sed 's/[^a-zA-Z0-9-]//g') # Sanitize
-GIT_HASH := $(shell git rev-parse HEAD)
+GIT_BRANCH := $(shell $(GIT) rev-parse --abbrev-ref HEAD | $(SED) 's/[^a-zA-Z0-9-]//g') # Sanitize
+GIT_HASH := $(shell $(GIT) rev-parse HEAD)
 
 override TAGS += branch-$(GIT_BRANCH) \
 				         git-$(GIT_HASH)
