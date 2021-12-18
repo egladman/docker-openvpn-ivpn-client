@@ -3,14 +3,11 @@
 set -o pipefail -o errexit
 
 main() {
-    local config_dir="${CONFIG_DIR:-/config/client}"
-    local pass_file="${PASS_FILE:-/config/credentials}"
-
     # This could be accomplished with a sed one-liner, but where's the fun in
     # that. Pure bash solution ftw
 
     regex="^auth-user-pass([[:blank:]]){0,}"
-    for conf in "${config_dir}"/*.ovpn; do
+    for conf in "${CONFIG_DIR:?}"/*.ovpn; do
         conf_patched=0
 
         while read -r line; do
@@ -18,8 +15,8 @@ main() {
         done < "$conf"
 
         for i in "${!conf_data[@]}"; do
-            if [[ "${conf_data[$i]}" =~ $regex ]] && [[ "${conf_data[$i]}" != *"${pass_file}" ]]; then
-                conf_data[$i]="auth-user-pass ${pass_file}"
+            if [[ "${conf_data[$i]}" =~ $regex ]] && [[ "${conf_data[$i]}" != *"${PASS_FILE:?}" ]]; then
+                conf_data[$i]="auth-user-pass ${PASS_FILE}"
                 conf_patched=1
             fi
         done
@@ -41,19 +38,19 @@ main() {
         log::warn "Environment variable 'PASSWORD' is unset. Defaulting to 'hunter2'."
     fi
 
-    if [[ -f "$pass_file" ]]; then # A pass file was bind mounted in
+    if [[ -f "$PASS_FILE" ]]; then # A pass file was bind mounted in
         log::debug "Found openvpn credentials file."
         return
     fi
 
-    log::debug "Creating credentials file '$pass_file'."
+    log::debug "Creating credentials file '$PASS_FILE'."
 
     # shellcheck disable=SC2188
-    >"$pass_file"
-    chmod 600 "$pass_file"
+    >"$PASS_FILE"
+    chmod 600 "$PASS_FILE"
 
-    printf '%s\n' "$USERNAME" > "$pass_file"
-    printf '%s\n' "${PASSWORD:-hunter2}" >> "$pass_file"
+    printf '%s\n' "$USERNAME" > "$PASS_FILE"
+    printf '%s\n' "${PASSWORD:-hunter2}" >> "$PASS_FILE"
 }
 
 main
