@@ -1,6 +1,10 @@
 openvpn
---config "$CONFIG"
---verb "$OPENVPN_LOGLEVEL"
+--config
+"$CONFIG"
+--verb
+"$OPENVPN_LOGLEVEL"
 --auth-nocache
---script-security 2
---up /tmp/openvpn_up
+--script-security
+2
+--up
+/tmp/openvpn_up

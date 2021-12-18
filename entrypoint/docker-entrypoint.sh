@@ -75,6 +75,14 @@ done
 if [[ -z "$1" ]] && [[ -s /var/cache/docker/cmd ]]; then
     log::debug "No command passed. Using default. Reading '/var/cache/docker/cmd'."
     mapfile -t file_data < /var/cache/docker/cmd
+
+    is_variable='^((")?\$)([a-zA-Z_])+(")?$'
+    for i in "${!file_data[@]}"; do
+        if [[ "${file_data[$i]}" =~ $is_variable ]]; then
+            log::debug "Evaluating ${file_data[$i]}."
+            file_data[$i]="$(eval printf '%s' "${file_data[$i]}")"
+        fi
+    done
     set -- "${file_data[@]}"
 elif [[ -z "$1" ]]; then
     log::error "No command passed to entrypoint."
@@ -83,5 +91,5 @@ fi
 
 # shellcheck disable=SC2145
 log::info "Finished configuration. Launching '${@:1:1}'."
-
+log::debug "$*"
 exec "$@"
