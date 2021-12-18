@@ -65,10 +65,10 @@ for f in /docker-entrypoint.d/*.sh; do
     fi
 
     if [[ -x "$f" ]]; then # It's executable
-	      log::info "Executing script '$f'"
+	      log::info "Executing script '${f}'"
 	      "$f"
     else
-	      log::warn "Ignoring '${script}'. Not executable."
+	      log::warn "Ignoring '${f}'. Not executable."
     fi
 done
 

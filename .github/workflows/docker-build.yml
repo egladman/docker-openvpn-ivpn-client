@@ -12,6 +12,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
