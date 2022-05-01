@@ -46,6 +46,9 @@ $(info Docker buildx enabled: $(BUILDX_ENABLED))
 image:
 	$(DOCKER) build . $(DOCKER_BUILD_FLAGS)
 
+image-devel:
+	$(DOCKER) build . $(DOCKER_BUILD_FLAGS) --build-arg VARIANT=devel
+
 image-push:
 ifeq ($(BUILDX_ENABLED),true)
 	$(MAKE) image DOCKER_BUILD_FLAGS+="--push"
