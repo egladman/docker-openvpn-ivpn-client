@@ -30,10 +30,10 @@ log::error() {
 export DEBUG_ENTRYPOINT=${DEBUG_ENTRYPOINT:-0}
 export -f _log log::warn log::info log::debug log::error
 
-if [[ -s /var/cache/docker/env ]]; then
-    mapfile -t file_data < "/var/cache/docker/env"
+if [[ -s /var/cache/docker-entrypoint/env ]]; then
+    mapfile -t file_data < "/var/cache/docker-entrypoint/env"
     log::info "Initalizing environment."
-    log::debug "Reading /var/cache/docker/env"
+    log::debug "Reading /var/cache/docker-entrypoint/env"
 
     is_optional='^([a-zA-Z_])+[[:space:]]\?=[[:space:]]'
     for line in "${file_data[@]}"; do
@@ -58,7 +58,7 @@ if [[ -s /var/cache/docker/env ]]; then
 fi
 
 log::debug "Checking /docker-entrypoint.d"
-for f in /docker-entrypoint.d/*.sh; do
+for f in /etc/docker-entrypoint.d/*.sh; do
     if [[ $SKIP_ENTRYPOINTD -eq 1 ]]; then
 	      log::info "Skipping executables in '/docker-entrypoint.d'"
 	      break
@@ -72,9 +72,9 @@ for f in /docker-entrypoint.d/*.sh; do
     fi
 done
 
-if [[ -z "$1" ]] && [[ -s /var/cache/docker/cmd ]]; then
-    log::debug "No command passed. Using default. Reading '/var/cache/docker/cmd'."
-    mapfile -t file_data < /var/cache/docker/cmd
+if [[ -z "$1" ]] && [[ -s /var/cache/docker-entrypoint/cmd ]]; then
+    log::debug "No command passed. Using default. Reading '/var/cache/docker-entrypoint/cmd'."
+    mapfile -t file_data < /var/cache/docker-entrypoint/cmd
 
     is_variable='^((")?\$)([a-zA-Z_])+(")?$'
     for i in "${!file_data[@]}"; do
