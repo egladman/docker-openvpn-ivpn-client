@@ -34,12 +34,20 @@ make image
 ```
 
 ### Advanced
-Create image `openvpn-ivpn`
+
+1. Create image `openvpn-ivpn`
+
 - Skip checksum validation
 - Do not use cache when building image
 
 ```
 make image DOCKER_BUILD_FLAGS="--no-cache --build-arg SKIP_CHECKSUM=1" 
+```
+
+2. Create devel image `openvpn-ivpn`
+
+```
+make image IMAGE_VARIANT=devel
 ```
 
 ## Run

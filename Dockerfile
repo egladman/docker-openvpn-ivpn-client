@@ -29,6 +29,7 @@ RUN set -eux; \
       curl \
       ca-certificates \
       unzip \
+      net-tools \
     ; \
     rm -rf /var/lib/apt/lists/*
 

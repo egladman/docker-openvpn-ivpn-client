@@ -2,7 +2,9 @@ DOCKER := docker
 SED := sed
 GIT := git
 
-DOCKER_BUILD_FLAGS :=
+IMAGE_VARIANT := core # core | devel
+
+DOCKER_BUILD_FLAGS := --build-arg VARIANT=$(IMAGE_VARIANT)
 
 SPACE=$() $()
 COMMA=,
@@ -14,7 +16,7 @@ GIT_BRANCH := $(shell $(GIT) rev-parse --abbrev-ref HEAD | $(SED) 's/[^a-zA-Z0-9
 GIT_HASH := $(shell $(GIT) rev-parse HEAD)
 
 override TAGS += branch-$(GIT_BRANCH) \
-				         git-$(GIT_HASH)
+                 git-$(GIT_HASH)
 
 # Tag image with 'latest' by default
 ifeq ($(TAG_LATEST),true)
@@ -24,19 +26,20 @@ endif
 # Auto enable buildx when available
 BUILDX_ENABLED := $(shell docker buildx version > /dev/null 2>&1 && printf true || printf false)
 BUILDX_PLATFORMS := linux/amd64 linux/arm64
+BUILDX_FLAGS :=
 
 ifdef REPOSITORY_PREFIX
     override REPOSITORY := $(REPOSITORY_PREFIX)/$(REPOSITORY)
 endif
 
 ifdef TAGS
-		TAG_PREFIX := --tag $(REPOSITORY):
+    TAG_PREFIX := --tag $(REPOSITORY):
     override DOCKER_BUILD_FLAGS += $(TAG_PREFIX)$(subst $(SPACE),$(SPACE)$(TAG_PREFIX),$(strip $(TAGS)))
 endif
 
 ifeq ($(BUILDX_ENABLED),true)
-		override DOCKER := $(DOCKER) buildx
-		override DOCKER_BUILD_FLAGS += --platform $(subst $(SPACE),$(COMMA),$(BUILDX_PLATFORMS))
+    override DOCKER := $(DOCKER) buildx
+    override DOCKER_BUILD_FLAGS += --platform $(subst $(SPACE),$(COMMA),$(BUILDX_PLATFORMS))
 endif
 
 $(info Docker buildx enabled: $(BUILDX_ENABLED))
@@ -45,9 +48,6 @@ $(info Docker buildx enabled: $(BUILDX_ENABLED))
 
 image:
 	$(DOCKER) build . $(DOCKER_BUILD_FLAGS)
-
-image-devel:
-	$(DOCKER) build . $(DOCKER_BUILD_FLAGS) --build-arg VARIANT=devel
 
 image-push:
 ifeq ($(BUILDX_ENABLED),true)
