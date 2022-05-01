@@ -1,7 +1,6 @@
 ARG REGISTRY=docker.io/
 ARG DEBIAN_VERSION=bullseye
 ARG SCRATCHDIR=/scratch
-ARG GO_VERSION=1.18
 ARG VARIANT=core
 
 
